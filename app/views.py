@@ -32,7 +32,7 @@ def display_webpages(request):
     QSW=Webpage.objects.filter(name__in=['chanukya','sai','nawaaz'])
     QSW=Webpage.objects.filter(Q(topic_name='Cricket')|Q(name='sai'))
     QSW=Webpage.objects.all()
-    QSW=Webpage.objects.filter(Q(topic_name='Rugby')&Q(url__startswith='https'))
+    #QSW=Webpage.objects.filter(Q(topic_name='Rugby')&Q(url__startswith='https'))
     d={'webpages':QSW}
     return render(request,'display_webpages.html',d)
 
@@ -49,3 +49,27 @@ def display_access(request):
     
     d={'access':QSA}
     return render(request,'display_access.html',d)
+
+def update_webpage(request):
+    Webpage.objects.filter(topic_name='vallyball').update(url='https://naveen.in')
+    Webpage.objects.filter(topic_name='Cricket').update(url='https://nani.in')
+    Webpage.objects.filter(topic_name='Cricket').update(name='MSD')
+    Webpage.objects.filter(name='Naveen').update(topic_name='Cricket')
+    #Webpage.objects.filter(name='sai').update(topic_name='Hockey')
+    #Webpage.objects.update_or_create(name='chanukya',defualts={'url':'https://suresh.in'})
+    #Webpage.objects.update_or_create(name='MSD',defualts={'url:https://MSD.in'})
+    T=Topic.objects.get_or_create(topic_name='Cricket')[0]
+    T.save()
+    Webpage.objects.update_or_create(name='ashu',defaults={'topic_name':T,'url':'https://suresh.in'})
+    QSW=Webpage.objects.all()
+    d={'webpages':QSW}
+    return render(request,'display_webpages.html',d)
+
+def delete_webpage(request):
+    #Webpage.objects.filter(name='nawaaz').delete()
+    #Webpage.objects.filter(topic_name='Cricket').delete()
+    #Webpage.objects.filter(name='sai').delete()
+    Webpage.objects.all().delete()
+    QSW=Webpage.objects.all()
+    d={'webpages':QSW}
+    return render(request,'display_webpages.html',d)
